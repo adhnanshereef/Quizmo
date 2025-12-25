@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="system">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- Primary Meta Tags -->
+    <title>Quizmo — JSON to Interactive Quiz, Instantly</title>
+    <meta name="title" content="Quizmo — JSON to Interactive Quiz, Instantly">
+    <meta name="description"
+        content="Quizmo is a modern, free quiz application that lets you create custom quizzes from JSON data. Perfect for studying, teaching, or testing knowledge. Features timer, shuffle, instant feedback, and AI quiz generation support.">
+    <meta name="keywords"
+        content="quiz app, quiz maker, JSON quiz, interactive quiz, study tool, learning app, quiz generator, free quiz, online quiz, education, test maker, Quizmo, AI quiz">
+    <meta name="author" content="Adhnan Shereef T">
+    <meta name="creator" content="Adhnan Shereef T">
+    <meta name="publisher" content="Adhnan Shereef T">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    <meta name="revisit-after" content="7 days">
+    <meta name="category" content="Education">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://www.adhnan.tech/quizmo">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.adhnan.tech/quizmo">
+    <meta property="og:title" content="Quizmo — JSON to Interactive Quiz, Instantly">
+    <meta property="og:description"
+        content="A modern quiz app that turns JSON data into interactive quizzes. Features timer, shuffle, instant feedback & AI quiz generation support. Free & easy to use!">
+    <meta property="og:image" content="https://www.adhnan.tech/quizmo/assets/background-logo.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Quizmo - Interactive Quiz Application">
+    <meta property="og:site_name" content="Quizmo">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://www.adhnan.tech/quizmo">
+    <meta name="twitter:title" content="Quizmo — JSON to Interactive Quiz, Instantly">
+    <meta name="twitter:description"
+        content="A modern quiz app that turns JSON data into interactive quizzes. Features timer, shuffle, instant feedback & AI quiz generation support. Free & easy to use!">
+    <meta name="twitter:image" content="https://www.adhnan.tech/quizmo/assets/background-logo.png">
+    <meta name="twitter:image:alt" content="Quizmo - Interactive Quiz Application">
+    <meta name="twitter:site" content="@adhnanshereef">
+    <meta name="twitter:creator" content="@adhnanshereef">
+
+    <!-- Apple Touch Icon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/quizmo-logo.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/quizmo-logo.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/quizmo-logo.png">
+
+    <!-- Favicon -->
+    <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
+
+    <!-- Theme Color for Mobile Browsers -->
+    <meta name="theme-color" content="#667eea">
+    <meta name="msapplication-TileColor" content="#667eea">
+    <meta name="msapplication-TileImage" content="assets/quizmo-logo.png">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Quizmo",
+        "description": "A modern quiz application that lets you create custom quizzes from JSON data. Perfect for studying, teaching, or testing knowledge.",
+        "url": "https://www.adhnan.tech/quizmo",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "Any",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "author": {
+            "@type": "Person",
+            "name": "Adhnan Shereef T",
+            "url": "https://www.adhnan.tech",
+            "sameAs": [
+                "https://x.com/adhnanshereef",
+                "https://instagram.com/adhnanshereef"
+            ]
+        },
+        "creator": {
+            "@type": "Person",
+            "name": "Adhnan Shereef T"
+        },
+        "image": "https://www.adhnan.tech/quizmo/assets/background-logo.png",
+        "screenshot": "https://www.adhnan.tech/quizmo/assets/background-logo.png",
+        "featureList": [
+            "Create quizzes from JSON data",
+            "Upload or paste JSON questions",
+            "Customizable timer per question",
+            "Shuffle questions option",
+            "Instant answer feedback",
+            "Detailed quiz results and statistics",
+            "Light and dark theme support",
+            "AI prompt for quiz generation",
+            "Fully responsive design",
+            "Keyboard shortcuts"
+        ],
+        "browserRequirements": "Requires JavaScript",
+        "softwareVersion": "1.0.0"
+    }
+    </script>
+</head>
+
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+        <div class="gradient-orb orb-3"></div>
+    </div>
+
+    <!-- Confetti Container -->
+    <div id="confetti-container"></div>
+
+    <!-- Welcome Guide Modal -->
+    <div class="modal-overlay" id="welcome-modal">
+        <div class="modal glass-card">
+            <button class="modal-close" id="close-welcome" aria-label="Close">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+
+            <div class="modal-header">
+                <div class="modal-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                </div>
+                <h2>Welcome to Quizmo! 🎯</h2>
+                <p>Turn any topic into an interactive quiz in seconds</p>
+            </div>
+
+            <div class="modal-content">
+                <div class="guide-section">
+                    <h3>What is Quizmo?</h3>
+                    <p>Quizmo is a modern quiz application that lets you create custom quizzes from JSON data. Perfect
+                        for studying, teaching, or testing your knowledge on any topic!</p>
+                </div>
+
+                <div class="guide-section">
+                    <h3>How to Use</h3>
+                    <div class="steps-list">
+                        <div class="step">
+                            <span class="step-number">1</span>
+                            <div class="step-content">
+                                <strong>Prepare your questions</strong>
+                                <p>Create a JSON array with questions, options, and answers</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">2</span>
+                            <div class="step-content">
+                                <strong>Paste or upload</strong>
+                                <p>Paste the JSON directly or upload a .json file</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">3</span>
+                            <div class="step-content">
+                                <strong>Configure settings</strong>
+                                <p>Set timer, shuffle questions, or show answers immediately</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">4</span>
+                            <div class="step-content">
+                                <strong>Start quizzing!</strong>
+                                <p>Take the quiz and review your results</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="guide-section">
+                    <h3>🤖 Generate Quiz with AI</h3>
+                    <p>Use this prompt with ChatGPT, Claude, or any AI to generate quiz questions:</p>
+                    <div class="ai-prompt-box">
+                        <pre id="ai-prompt">Generate a quiz about [YOUR TOPIC] with [NUMBER] multiple choice questions. Return ONLY a valid JSON array in this exact format, no other text:
+
+[
+  {
+    "question": "Question text here?",
+    "options": ["Option A", "Option B", "Option C", "Option D"],
+    "answer": "Correct option text"
+  }
+]
+
+Make sure:
+- Each question has 4 options
+- The answer exactly matches one of the options
+- Questions vary in difficulty
+- Cover different aspects of the topic</pre>
+                        <button class="copy-prompt-btn" id="copy-prompt">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                            <span>Copy Prompt</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <label class="dont-show-again">
+                    <input type="checkbox" id="dont-show-again">
+                    <span>Don't show this again</span>
+                </label>
+                <button class="btn btn-primary" id="get-started-btn">
+                    <span>Get Started</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Button -->
+    <button class="help-btn" id="help-btn" aria-label="Help">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+        </svg>
+    </button>
+
+    <!-- Theme Toggle -->
+    <div class="theme-toggle-container">
+        <button class="theme-btn" id="theme-btn" aria-label="Toggle theme">
+            <svg class="theme-icon sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <svg class="theme-icon moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+            <svg class="theme-icon system-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                <line x1="8" y1="21" x2="16" y2="21"></line>
+                <line x1="12" y1="17" x2="12" y2="21"></line>
+            </svg>
+        </button>
+        <div class="theme-dropdown" id="theme-dropdown">
+            <button class="theme-option" data-theme="light">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+                Light
+            </button>
+            <button class="theme-option" data-theme="dark">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+                Dark
+            </button>
+            <button class="theme-option" data-theme="system">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                    <line x1="8" y1="21" x2="16" y2="21"></line>
+                    <line x1="12" y1="17" x2="12" y2="21"></line>
+                </svg>
+                System
+            </button>
+        </div>
+    </div>
+
+    <main class="container">
+        <!-- Home Screen -->
+        <section id="home-screen" class="screen active">
+            <div class="glass-card home-card">
+                <div class="logo-container">
+                    <img src="assets/quizmo-logo.png" alt="Quizmo Logo" class="logo">
+                </div>
+                <h1 class="title">Quizmo</h1>
+                <p class="subtitle">Create engaging quizzes from your JSON data</p>
+
+                <!-- JSON Input Methods -->
+                <div class="input-section">
+                    <div class="tabs">
+                        <button class="tab active" data-tab="paste">Paste JSON</button>
+                        <button class="tab" data-tab="upload">Upload File</button>
+                    </div>
+
+                    <div class="tab-content active" id="paste-tab">
+                        <textarea id="json-input" class="glass-input" placeholder='Paste your JSON array here...
+
+Example format:
+[
+  {
+    "question": "What is the capital of France?",
+    "options": ["London", "Berlin", "Paris", "Madrid"],
+    "answer": "Paris"
+  }
+]'></textarea>
+                    </div>
+
+                    <div class="tab-content" id="upload-tab">
+                        <div class="file-upload-area" id="drop-zone">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                            <p>Drag & drop your JSON file here</p>
+                            <span>or</span>
+                            <label class="file-btn">
+                                Browse Files
+                                <input type="file" id="file-input" accept=".json" hidden>
+                            </label>
+                        </div>
+                        <p class="file-name" id="file-name"></p>
+                    </div>
+                </div>
+
+                <!-- JSON Structure Info -->
+                <details class="json-structure">
+                    <summary>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="16" x2="12" y2="12"></line>
+                            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                        </svg>
+                        JSON Structure Guide
+                    </summary>
+                    <div class="structure-content">
+                        <pre><code>[
+  {
+    <span class="key">"question"</span>: <span class="string">"Your question text here?"</span>,
+    <span class="key">"options"</span>: [
+      <span class="string">"Option A"</span>,
+      <span class="string">"Option B"</span>,
+      <span class="string">"Option C"</span>,
+      <span class="string">"Option D"</span>
+    ],
+    <span class="key">"answer"</span>: <span class="string">"Correct option text"</span>
+  },
+  {
+    <span class="key">"question"</span>: <span class="string">"Another question?"</span>,
+    <span class="key">"options"</span>: [<span class="string">"A"</span>, <span class="string">"B"</span>, <span class="string">"C"</span>, <span class="string">"D"</span>],
+    <span class="key">"answer"</span>: <span class="string">"B"</span>
+  }
+]</code></pre>
+                        <div class="structure-notes">
+                            <p><strong>Required fields:</strong></p>
+                            <ul>
+                                <li><code>question</code> - The question text (string)</li>
+                                <li><code>options</code> - Array of answer choices (array of strings)</li>
+                                <li><code>answer</code> - The correct answer (must match one of the options)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </details>
+
+                <!-- Quiz Settings -->
+                <div class="settings-section">
+                    <h3>Quiz Settings</h3>
+                    <div class="settings-grid">
+                        <div class="setting-item">
+                            <label class="toggle-label">
+                                <span>Enable Timer</span>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="timer-toggle">
+                                    <span class="toggle-slider"></span>
+                                </div>
+                            </label>
+                            <div class="timer-settings" id="timer-settings">
+                                <label>
+                                    <span>Time per question (seconds):</span>
+                                    <input type="number" id="time-per-question" class="glass-input small" value="30"
+                                        min="5" max="300">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="setting-item">
+                            <label class="toggle-label">
+                                <span>Show answer after each question</span>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="show-answer-toggle" checked>
+                                    <span class="toggle-slider"></span>
+                                </div>
+                            </label>
+                            <p class="setting-hint">If disabled, all answers will be shown at the end</p>
+                        </div>
+                        <div class="setting-item">
+                            <label class="toggle-label">
+                                <span>Shuffle Questions</span>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="shuffle-toggle">
+                                    <span class="toggle-slider"></span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="start-quiz-btn" class="btn btn-primary" disabled>
+                    <span>Start Quiz</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </button>
+
+                <p class="error-message" id="error-message"></p>
+            </div>
+        </section>
+
+        <!-- Quiz Screen -->
+        <section id="quiz-screen" class="screen">
+            <div class="quiz-header">
+                <div class="quiz-progress">
+                    <div class="progress-text">
+                        <span>Question <span id="current-question">1</span> of <span
+                                id="total-questions">10</span></span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                </div>
+                <div class="quiz-timer" id="quiz-timer">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <span id="timer-display">00:30</span>
+                </div>
+            </div>
+
+            <div class="glass-card quiz-card">
+                <div class="question-container">
+                    <h2 class="question-text" id="question-text">What is the capital of France?</h2>
+                </div>
+
+                <div class="options-container" id="options-container">
+                    <!-- Options will be dynamically inserted -->
+                </div>
+
+                <div class="quiz-actions">
+                    <button id="next-btn" class="btn btn-primary" disabled>
+                        <span>Next Question</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </button>
+                    <button id="quit-btn" class="btn btn-secondary">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                        <span>Quit Quiz</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Results Screen -->
+        <section id="results-screen" class="screen">
+            <div class="glass-card results-card">
+                <div class="results-header">
+                    <div class="trophy-container" id="trophy-container">
+                        <svg class="trophy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+                            <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+                            <path d="M4 22h16"></path>
+                            <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
+                            <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
+                            <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
+                        </svg>
+                    </div>
+                    <h2 class="results-title">Quiz Complete!</h2>
+                    <p class="results-subtitle" id="results-message">Great job!</p>
+                </div>
+
+                <div class="score-display">
+                    <div class="score-circle">
+                        <svg class="score-ring" viewBox="0 0 120 120">
+                            <circle class="score-ring-bg" cx="60" cy="60" r="54"></circle>
+                            <circle class="score-ring-fill" id="score-ring-fill" cx="60" cy="60" r="54"></circle>
+                        </svg>
+                        <div class="score-text">
+                            <span class="score-percentage" id="score-percentage">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-item correct">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <div class="stat-info">
+                            <span class="stat-value" id="correct-count">0</span>
+                            <span class="stat-label">Correct</span>
+                        </div>
+                    </div>
+                    <div class="stat-item incorrect">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                        <div class="stat-info">
+                            <span class="stat-value" id="incorrect-count">0</span>
+                            <span class="stat-label">Incorrect</span>
+                        </div>
+                    </div>
+                    <div class="stat-item skipped">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="8" y1="12" x2="16" y2="12"></line>
+                        </svg>
+                        <div class="stat-info">
+                            <span class="stat-value" id="skipped-count">0</span>
+                            <span class="stat-label">Skipped</span>
+                        </div>
+                    </div>
+                    <div class="stat-item time">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        <div class="stat-info">
+                            <span class="stat-value" id="time-taken">0:00</span>
+                            <span class="stat-label">Time Taken</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Answer Review Section -->
+                <div class="review-section" id="review-section">
+                    <h3>Review Answers</h3>
+                    <div class="review-list" id="review-list">
+                        <!-- Review items will be dynamically inserted -->
+                    </div>
+                </div>
+
+                <div class="results-actions">
+                    <button id="retry-btn" class="btn btn-primary">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="23 4 23 10 17 10"></polyline>
+                            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                        </svg>
+                        <span>Try Again</span>
+                    </button>
+                    <button id="new-quiz-btn" class="btn btn-secondary">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        <span>New Quiz</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="footer-copyright">&copy; 2025 <a href="https://www.adhnan.tech" target="_blank"
+                    rel="noopener noreferrer">Adhnan</a>. All rights reserved.</p>
+            <div class="footer-social">
+                <a href="https://x.com/adhnanshereef" target="_blank" rel="noopener noreferrer"
+                    aria-label="Follow on X (Twitter)">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                    </svg>
+                </a>
+                <a href="https://instagram.com/adhnanshereef" target="_blank" rel="noopener noreferrer"
+                    aria-label="Follow on Instagram">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                    </svg>
+                </a>
+                <a href="https://www.adhnan.tech" target="_blank" rel="noopener noreferrer" aria-label="Visit Website">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="2" y1="12" x2="22" y2="12"></line>
+                        <path
+                            d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                        </path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
