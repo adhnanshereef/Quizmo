@@ -573,6 +573,7 @@ textarea.glass-input {
     overflow-x: auto;
     font-size: 13px;
     line-height: 1.6;
+    position: relative;
 }
 
 .structure-content code {
@@ -586,6 +587,52 @@ textarea.glass-input {
 
 .structure-content .string {
     color: var(--success);
+}
+
+.structure-content .comment {
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+.copy-structure-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: var(--text-primary);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+
+.copy-structure-btn:hover {
+    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.copy-structure-btn svg {
+    width: 14px;
+    height: 14px;
+}
+
+.copy-structure-btn.copied {
+    background: var(--success);
+    color: white;
+    border-color: var(--success);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
 }
 
 .structure-notes {
@@ -895,6 +942,110 @@ textarea.glass-input {
     margin-bottom: 24px;
 }
 
+/* Text Input Answer (for text-input questions) */
+.text-answer-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+
+.text-answer-label {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: -8px;
+}
+
+.text-answer-input {
+    width: 100%;
+    padding: 14px 18px;
+    font-size: 16px;
+    font-family: inherit;
+    color: var(--text-primary);
+    background: var(--input-bg);
+    border: 2px solid var(--input-border);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.text-answer-input:focus {
+    border-color: var(--gradient-start);
+    background: var(--bg-secondary);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.text-answer-input:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.text-answer-input.correct {
+    border-color: var(--success);
+    background: var(--success-light);
+}
+
+.text-answer-input.incorrect {
+    border-color: var(--error);
+    background: var(--error-light);
+}
+
+.submit-answer-btn {
+    align-self: flex-start;
+    min-width: 160px;
+}
+
+.text-answer-feedback {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 18px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 500;
+    animation: slideIn 0.3s ease;
+}
+
+.text-answer-feedback.correct {
+    background: var(--success-light);
+    color: var(--success);
+    border: 1px solid var(--success);
+}
+
+.text-answer-feedback.incorrect {
+    background: var(--error-light);
+    color: var(--error);
+    border: 1px solid var(--error);
+}
+
+.text-answer-feedback svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+.text-answer-feedback strong {
+    font-weight: 700;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Multiple Choice Options */
 .option-btn {
     display: flex;
     align-items: center;
@@ -1515,6 +1666,32 @@ textarea.glass-input {
     
     .option-text {
         font-size: 14px;
+    }
+    
+    /* Text input responsive */
+    .text-answer-container {
+        padding: 16px;
+        gap: 14px;
+    }
+    
+    .text-answer-label {
+        font-size: 15px;
+    }
+    
+    .text-answer-input {
+        padding: 12px 16px;
+        font-size: 15px;
+    }
+    
+    .submit-answer-btn {
+        width: 100%;
+        min-width: auto;
+    }
+    
+    .text-answer-feedback {
+        font-size: 14px;
+        padding: 12px 16px;
+        flex-wrap: wrap;
     }
 
     .stats-grid {
