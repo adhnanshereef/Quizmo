@@ -205,19 +205,28 @@
                     <h3>🤖 Generate Quiz with AI</h3>
                     <p>Use this prompt with ChatGPT, Claude, or any AI to generate quiz questions:</p>
                     <div class="ai-prompt-box">
-                        <pre id="ai-prompt">Generate a quiz about [YOUR TOPIC] with [NUMBER] multiple choice questions. Return ONLY a valid JSON array in this exact format, no other text:
+                        <pre id="ai-prompt">Generate a quiz about [YOUR TOPIC] with [NUMBER] questions. Return ONLY a valid JSON array in this exact format, no other text:
 
 [
   {
     "question": "Question text here?",
     "options": ["Option A", "Option B", "Option C", "Option D"],
     "answer": "Correct option text"
+  },
+  {
+    "question": "Short answer question?",
+    "answer": "Expected answer",
+    "type": "text-input"
   }
 ]
 
+Question types:
+- Multiple-choice: Include "options" array with 2+ choices
+- Text-input: Omit "options" or set "type": "text-input"
+
 Make sure:
-- Each question has 4 options
-- The answer exactly matches one of the options
+- Mix both question types for variety
+- Answers are case-insensitive
 - Questions vary in difficulty
 - Cover different aspects of the topic</pre>
                         <button class="copy-prompt-btn" id="copy-prompt">
@@ -337,6 +346,11 @@ Example format:
     "question": "What is the capital of France?",
     "options": ["London", "Berlin", "Paris", "Madrid"],
     "answer": "Paris"
+  },
+  {
+    "question": "Who wrote Romeo and Juliet?",
+    "answer": "William Shakespeare",
+    "type": "text-input"
   }
 ]'></textarea>
                     </div>
@@ -360,7 +374,7 @@ Example format:
                 </div>
 
                 <!-- JSON Structure Info -->
-                <details class="json-structure">
+<details class="json-structure">
                     <summary>
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="12" cy="12" r="10"></circle>
@@ -370,29 +384,63 @@ Example format:
                         JSON Structure Guide
                     </summary>
                     <div class="structure-content">
-                        <pre><code>[
+                        <pre id="json-structure-code">
+                            <button class="copy-structure-btn" id="copy-structure">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                                <span>Copy</span>
+                            </button>
+                            <code>
+[
+  <span class="comment">// Multiple-Choice Question (with options array)</span>
   {
-    <span class="key">"question"</span>: <span class="string">"Your question text here?"</span>,
+    <span class="key">"question"</span>: <span class="string">"What is the capital of France?"</span>,
     <span class="key">"options"</span>: [
-      <span class="string">"Option A"</span>,
-      <span class="string">"Option B"</span>,
-      <span class="string">"Option C"</span>,
-      <span class="string">"Option D"</span>
+      <span class="string">"London"</span>,
+      <span class="string">"Berlin"</span>,
+      <span class="string">"Paris"</span>,
+      <span class="string">"Madrid"</span>
     ],
-    <span class="key">"answer"</span>: <span class="string">"Correct option text"</span>
+    <span class="key">"answer"</span>: <span class="string">"Paris"</span>
   },
+  
+  <span class="comment">// Text-Input Question (no options, user types answer)</span>
   {
-    <span class="key">"question"</span>: <span class="string">"Another question?"</span>,
-    <span class="key">"options"</span>: [<span class="string">"A"</span>, <span class="string">"B"</span>, <span class="string">"C"</span>, <span class="string">"D"</span>],
-    <span class="key">"answer"</span>: <span class="string">"B"</span>
+    <span class="key">"question"</span>: <span class="string">"Who wrote Romeo and Juliet?"</span>,
+    <span class="key">"answer"</span>: <span class="string">"William Shakespeare"</span>,
+    <span class="key">"type"</span>: <span class="string">"text-input"</span>  <span class="comment">// Optional, auto-detected if options missing</span>
+  },
+  
+  <span class="comment">// Another Multiple-Choice (type auto-detected)</span>
+  {
+    <span class="key">"question"</span>: <span class="string">"What is 2 + 2?"</span>,
+    <span class="key">"options"</span>: [<span class="string">"3"</span>, <span class="string">"4"</span>, <span class="string">"5"</span>, <span class="string">"6"</span>],
+    <span class="key">"answer"</span>: <span class="string">"4"</span>
   }
 ]</code></pre>
+                        
                         <div class="structure-notes">
+                            <p><strong>Question Types:</strong></p>
+                            <ul>
+                                <li><strong>Multiple-Choice:</strong> Include <code>options</code> array (auto-detected)</li>
+                                <li><strong>Text-Input:</strong> Omit <code>options</code> or set <code>type: "text-input"</code></li>
+                            </ul>
+                            
                             <p><strong>Required fields:</strong></p>
                             <ul>
                                 <li><code>question</code> - The question text (string)</li>
-                                <li><code>options</code> - Array of answer choices (array of strings)</li>
-                                <li><code>answer</code> - The correct answer (must match one of the options)</li>
+                                <li><code>answer</code> - The correct answer (string, case-insensitive)</li>
+                                <li><code>options</code> - Required for multiple-choice (array of strings)</li>
+                                <li><code>type</code> - Optional: "multiple-choice" or "text-input" (auto-detected)</li>
+                            </ul>
+                            
+                            <p><strong>Notes:</strong></p>
+                            <ul>
+                                <li>Answers are checked case-insensitively</li>
+                                <li>Mix both question types in the same quiz</li>
+                                <li>Type is auto-detected if options are present</li>
                             </ul>
                         </div>
                     </div>

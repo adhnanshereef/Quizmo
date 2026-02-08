@@ -273,20 +273,45 @@ function validateJSON() {
                 return false;
             }
             
-            if (!Array.isArray(q.options) || q.options.length < 2) {
-                showError(`Question ${i + 1}: "options" must be an array with at least 2 choices`);
-                elements.startQuizBtn.disabled = true;
-                return false;
-            }
-            
             if (!q.answer || typeof q.answer !== 'string') {
                 showError(`Question ${i + 1}: Missing or invalid "answer" field`);
                 elements.startQuizBtn.disabled = true;
                 return false;
             }
             
-            if (!q.options.includes(q.answer)) {
-                showError(`Question ${i + 1}: Answer "${q.answer}" is not in the options list`);
+            // Auto-detect question type if not specified
+            if (!q.type) {
+                q.type = q.options && Array.isArray(q.options) && q.options.length > 0 
+                    ? 'multiple-choice' 
+                    : 'text-input';
+            }
+            
+            // Validate based on type
+            if (q.type === 'multiple-choice') {
+                if (!q.options || !Array.isArray(q.options) || q.options.length < 2) {
+                    showError(`Question ${i + 1}: Multiple-choice questions need at least 2 options`);
+                    elements.startQuizBtn.disabled = true;
+                    return false;
+                }
+                
+                // Check if answer matches one of the options (case-insensitive)
+                const answerLower = q.answer.toLowerCase().trim();
+                const optionsLower = q.options.map(opt => String(opt).toLowerCase().trim());
+                
+                if (!optionsLower.includes(answerLower)) {
+                    showError(`Question ${i + 1}: Answer must match one of the options`);
+                    elements.startQuizBtn.disabled = true;
+                    return false;
+                }
+            } else if (q.type === 'text-input') {
+                // Text input questions don't need options
+                if (!q.answer || q.answer.trim() === '') {
+                    showError(`Question ${i + 1}: Text-input questions need a valid answer`);
+                    elements.startQuizBtn.disabled = true;
+                    return false;
+                }
+            } else {
+                showError(`Question ${i + 1}: Invalid type "${q.type}". Use "multiple-choice" or "text-input"`);
                 elements.startQuizBtn.disabled = true;
                 return false;
             }
@@ -380,8 +405,28 @@ function loadQuestion() {
     // Update question text
     elements.questionText.textContent = question.question;
     
-    // Generate options
+    // Clear options container
     elements.optionsContainer.innerHTML = '';
+    
+    // Render based on question type
+    if (question.type === 'text-input') {
+        renderTextInputQuestion();
+    } else {
+        renderMultipleChoiceQuestion(question);
+    }
+    
+    // Reset next button
+    elements.nextBtn.disabled = true;
+    elements.nextBtn.querySelector('span').textContent = 
+        state.currentQuestionIndex === state.questions.length - 1 ? 'Finish Quiz' : 'Next Question';
+    
+    // Start timer if enabled
+    if (state.settings.timerEnabled) {
+        startTimer();
+    }
+}
+
+function renderMultipleChoiceQuestion(question) {
     const optionLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
     
     question.options.forEach((option, index) => {
@@ -401,21 +446,116 @@ function loadQuestion() {
         button.addEventListener('click', () => selectOption(button, option));
         elements.optionsContainer.appendChild(button);
     });
+}
+
+function renderTextInputQuestion() {
+    const inputContainer = document.createElement('div');
+    inputContainer.className = 'text-answer-container';
+    inputContainer.innerHTML = `
+        <label for="text-answer-input" class="text-answer-label">Type your answer:</label>
+        <input 
+            type="text" 
+            id="text-answer-input" 
+            class="text-answer-input" 
+            placeholder="Enter your answer here..."
+            autocomplete="off"
+        >
+        <button class="btn btn-primary submit-answer-btn" id="submit-text-answer">
+            <span>Submit Answer</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+        </button>
+        <div class="text-answer-feedback" id="text-answer-feedback"></div>
+    `;
+    elements.optionsContainer.appendChild(inputContainer);
     
-    // Reset next button
-    elements.nextBtn.disabled = true;
-    elements.nextBtn.querySelector('span').textContent = 
-        state.currentQuestionIndex === state.questions.length - 1 ? 'Finish Quiz' : 'Next Question';
+    const input = document.getElementById('text-answer-input');
+    const submitBtn = document.getElementById('submit-text-answer');
     
-    // Start timer if enabled
-    if (state.settings.timerEnabled) {
-        startTimer();
+    // Enable submit when user types
+    input.addEventListener('input', () => {
+        submitBtn.disabled = input.value.trim() === '';
+    });
+    
+    // Submit on Enter key
+    input.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && input.value.trim() !== '') {
+            submitTextAnswer();
+        }
+    });
+    
+    submitBtn.addEventListener('click', submitTextAnswer);
+    
+    // Focus on input
+    setTimeout(() => input.focus(), 100);
+}
+
+function submitTextAnswer() {
+    const input = document.getElementById('text-answer-input');
+    const submitBtn = document.getElementById('submit-text-answer');
+    const feedback = document.getElementById('text-answer-feedback');
+    const userAnswer = input.value.trim();
+    
+    if (!userAnswer) return;
+    
+    const question = state.questions[state.currentQuestionIndex];
+    
+    // Case-insensitive comparison
+    const isCorrect = userAnswer.toLowerCase() === question.answer.toLowerCase();
+    
+    // Disable input and button
+    input.disabled = true;
+    submitBtn.disabled = true;
+    
+    // Stop timer
+    stopTimer();
+    
+    // Record answer
+    state.answers.push({
+        questionIndex: state.currentQuestionIndex,
+        selectedAnswer: userAnswer,
+        isCorrect: isCorrect,
+        isSkipped: false
+    });
+    
+    if (isCorrect) {
+        state.score++;
     }
+    
+    // Show feedback
+    input.classList.add(isCorrect ? 'correct' : 'incorrect');
+    feedback.className = 'text-answer-feedback ' + (isCorrect ? 'correct' : 'incorrect');
+    
+    if (isCorrect) {
+        feedback.innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <span>Correct! 🎉</span>
+        `;
+        createConfetti(20);
+    } else {
+        feedback.innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+            <span>Incorrect. The correct answer is: <strong>${escapeHTML(question.answer)}</strong></span>
+        `;
+    }
+    
+    feedback.style.display = 'flex';
+    
+    // Enable next button
+    elements.nextBtn.disabled = false;
 }
 
 function selectOption(button, selectedAnswer) {
     const question = state.questions[state.currentQuestionIndex];
-    const isCorrect = selectedAnswer === question.answer;
+    
+    // Case-insensitive comparison for multiple-choice
+    const isCorrect = selectedAnswer.toLowerCase().trim() === question.answer.toLowerCase().trim();
     
     // Check if answer is already locked (when showAnswerAfterEach is true and answered)
     if (elements.optionsContainer.querySelector('.correct, .incorrect')) {
@@ -878,6 +1018,7 @@ function initEventListeners() {
     elements.getStartedBtn.addEventListener('click', hideWelcomeModal);
     elements.helpBtn.addEventListener('click', showWelcomeModal);
     elements.copyPromptBtn.addEventListener('click', copyAIPrompt);
+    document.getElementById('copy-structure').addEventListener('click', copyJSONStructure);
     elements.welcomeModal.addEventListener('click', (e) => {
         // Close modal when clicking overlay (outside modal content)
         if (e.target === elements.welcomeModal) {
@@ -981,6 +1122,60 @@ function copyAIPrompt() {
         setTimeout(() => {
             elements.copyPromptBtn.classList.remove('copied');
             elements.copyPromptBtn.querySelector('span').textContent = 'Copy Prompt';
+        }, 2000);
+    });
+}
+
+function copyJSONStructure() {
+    // Clean JSON structure without comments
+    const cleanJSON = `[
+  {
+    "question": "What is the capital of France?",
+    "options": [
+      "London",
+      "Berlin",
+      "Paris",
+      "Madrid"
+    ],
+    "answer": "Paris"
+  },
+  {
+    "question": "Who wrote Romeo and Juliet?",
+    "answer": "William Shakespeare",
+    "type": "text-input"
+  },
+  {
+    "question": "What is 2 + 2?",
+    "options": ["3", "4", "5", "6"],
+    "answer": "4"
+  }
+]`;
+    
+    const button = document.getElementById('copy-structure');
+    
+    navigator.clipboard.writeText(cleanJSON).then(() => {
+        button.classList.add('copied');
+        button.querySelector('span').textContent = 'Copied!';
+        
+        setTimeout(() => {
+            button.classList.remove('copied');
+            button.querySelector('span').textContent = 'Copy';
+        }, 2000);
+    }).catch(() => {
+        // Fallback for older browsers
+        const textarea = document.createElement('textarea');
+        textarea.value = cleanJSON;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        
+        button.classList.add('copied');
+        button.querySelector('span').textContent = 'Copied!';
+        
+        setTimeout(() => {
+            button.classList.remove('copied');
+            button.querySelector('span').textContent = 'Copy';
         }, 2000);
     });
 }
